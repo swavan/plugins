@@ -2,7 +2,7 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Repo   = "swavan/plugins"
-$Binary = "swavan-plugin"
+$Binary = "swavan"
 $Asset  = "${Binary}-windows-x86_64.tar.gz"
 $Url    = "https://github.com/$Repo/releases/latest/download/$Asset"
 

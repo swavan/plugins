@@ -2,7 +2,7 @@
 set -eu
 
 REPO="swavan/plugins"
-BINARY="swavan-plugin"
+BINARY="swavan"
 INSTALL_DIR="${SWAVAN_INSTALL_DIR:-$HOME/.local/bin}"
 
 # ── Detect OS ────────────────────────────────────────────────────────────────
