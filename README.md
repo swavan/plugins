@@ -54,6 +54,35 @@ swavan --help
 
 ---
 
+## Shell completion
+
+`swavan` ships scripts for bash, zsh, fish, PowerShell, and elvish. Pick the one that matches your shell:
+
+```sh
+# zsh — make sure your fpath picks up ~/.zfunc, then:
+swavan completions zsh > "${fpath[1]}/_swavan"
+
+# bash
+swavan completions bash | sudo tee /usr/local/etc/bash_completion.d/swavan >/dev/null
+
+# fish
+swavan completions fish > ~/.config/fish/completions/swavan.fish
+```
+
+```powershell
+# PowerShell
+swavan completions powershell | Out-String | Invoke-Expression
+# (or append the output to your $PROFILE for persistence)
+```
+
+Restart the shell after installing. Tab-complete any subcommand to verify:
+
+```sh
+swavan plugin <TAB>
+```
+
+---
+
 ## Update
 
 ### Update the CLI itself
