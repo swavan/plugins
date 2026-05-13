@@ -1,6 +1,6 @@
 # Swavan CLI
 
-`swavan` is the command-line companion for [Swavan SSH Studio](https://github.com/swavan/ssh-studio) and the apps built on top of it. It installs, updates, and manages **plugins** — standalone binaries that extend the host with new capabilities (Docker / Kubernetes management, AI terminal autocomplete, peer-to-peer sync, and more).
+`swavan` is a command-line tool that installs, updates, and manages **plugins** — standalone binaries that extend host apps with new capabilities (Docker / Kubernetes management, AI terminal autocomplete, peer-to-peer sync, and more).
 
 This repo (`swavan/plugins`) is the public artifact registry. It hosts:
 
@@ -186,4 +186,3 @@ Once your plugin is published as a GitHub Release with a `manifest.json` and per
 
 - CLI bugs → <https://github.com/swavan/cli/issues>
 - Plugin catalog / install script bugs → <https://github.com/swavan/plugins/issues>
-- SSH Studio host bugs → <https://github.com/swavan/ssh-studio/issues>
