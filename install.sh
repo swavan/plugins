@@ -61,12 +61,36 @@ if curl --proto '=https' --tlsv1.2 -sSfL "$CHECKSUM_URL" -o "$TMP/$ASSET.sha256"
 fi
 
 # ── Install ──────────────────────────────────────────────────────────────────
-tar -xzf "$TMP/$ASSET" -C "$TMP"
+# The release tarball contains the `swavan` CLI plus any sibling binaries
+# the CLI invokes at runtime (e.g. `swavan-plugin-shell` for `swavan launch`).
+# Extract everything and install every regular file with executable bits set,
+# so future binaries added to the tarball install automatically without
+# script changes.
+EXTRACT_DIR="$TMP/extracted"
+mkdir -p "$EXTRACT_DIR"
+tar -xzf "$TMP/$ASSET" -C "$EXTRACT_DIR"
+
+# Sanity check: the CLI itself must always be present.
+if [ ! -f "$EXTRACT_DIR/$BINARY" ]; then
+  echo "Error: $BINARY not found in $ASSET" >&2
+  exit 1
+fi
 
 mkdir -p "$INSTALL_DIR"
-install -m 755 "$TMP/$BINARY" "$INSTALL_DIR/$BINARY"
+INSTALLED=""
+# Top-level files only: the `[ -f "$SRC" ]` guard skips any directory that
+# might end up in the tarball later (e.g. a resources/ tree). If a
+# subdirectory layout is ever added, this loop should be revisited.
+for SRC in "$EXTRACT_DIR"/*; do
+  [ -f "$SRC" ] || continue
+  NAME=$(basename "$SRC")
+  install -m 755 "$SRC" "$INSTALL_DIR/$NAME"
+  INSTALLED="${INSTALLED}  - $INSTALL_DIR/$NAME
+"
+done
 
-echo "Installed $BINARY to $INSTALL_DIR/$BINARY"
+echo "Installed to $INSTALL_DIR:"
+printf '%s' "$INSTALLED"
 
 # ── PATH hint ────────────────────────────────────────────────────────────────
 case ":${PATH}:" in

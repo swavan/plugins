@@ -43,15 +43,32 @@ try {
     tar -xzf $AssetPath -C $ExtractDir
 
     # ── Install ───────────────────────────────────────────────────────────────
+    # The release tarball contains the `swavan` CLI plus any sibling binaries
+    # the CLI invokes at runtime (e.g. `swavan-plugin-shell.exe` for
+    # `swavan launch`). Copy every top-level file from the archive so future
+    # binaries install automatically without script changes.
     if (-not (Test-Path $InstallDir)) {
         New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null
     }
 
-    $Src  = Join-Path $ExtractDir "${Binary}.exe"
-    $Dest = Join-Path $InstallDir "${Binary}.exe"
-    Copy-Item -Path $Src -Destination $Dest -Force
+    # Sanity check: the CLI itself must always be present.
+    $CliSrc = Join-Path $ExtractDir "${Binary}.exe"
+    if (-not (Test-Path $CliSrc)) {
+        Write-Error "${Binary}.exe not found in $Asset"
+        exit 1
+    }
 
-    Write-Host "Installed ${Binary}.exe to $Dest"
+    $Installed = @()
+    Get-ChildItem -Path $ExtractDir -File | ForEach-Object {
+        $Dest = Join-Path $InstallDir $_.Name
+        Copy-Item -Path $_.FullName -Destination $Dest -Force
+        $Installed += $Dest
+    }
+
+    Write-Host "Installed to ${InstallDir}:"
+    foreach ($Path in $Installed) {
+        Write-Host "  - $Path"
+    }
 
     # ── PATH ──────────────────────────────────────────────────────────────────
     $UserPath = [Environment]::GetEnvironmentVariable("PATH", "User")
