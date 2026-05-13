@@ -8,8 +8,6 @@ This repo (`swavan/plugins`) is the public artifact registry. It hosts:
 - a [`catalog.json`](catalog.json) of available plugins
 - per-plugin GitHub Releases that the CLI downloads from
 
-Source code lives in the private [`swavan/cli`](https://github.com/swavan/cli) monorepo.
-
 ---
 
 ## Install
@@ -174,5 +172,4 @@ The full list lives in [`catalog.json`](catalog.json) and is the source of truth
 
 ## Reporting issues
 
-- CLI bugs → <https://github.com/swavan/cli/issues>
-- Plugin catalog / install script bugs → <https://github.com/swavan/plugins/issues>
+Open an issue at <https://github.com/swavan/plugins/issues>.
