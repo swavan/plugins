@@ -20,7 +20,7 @@ curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
 
 Downloads the latest signed `swavan` binary for your platform, verifies its SHA-256 checksum, and installs every binary in the tarball (`swavan` + sibling tools like `swavan-plugin-shell`) into `~/.local/bin/`.
 
-### Windows
+### Windows (CLI only — plugin tarballs not yet published)
 
 ```powershell
 irm https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex
@@ -28,20 +28,26 @@ irm https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex
 
 Installs to `%LOCALAPPDATA%\Programs\Swavan\bin\swavan.exe`.
 
-### Custom install location
+The CLI itself runs on Windows, but no plugin currently publishes a Windows tarball — `swavan plugin install …` will 404 until that lands. Tracked in [`release-plugin.yml`](https://github.com/swavan/cli/blob/main/.github/workflows/release-plugin.yml) (`openssh` crate is Unix-only; needs gating or a portable swap before Windows plugin builds can re-enable).
+
+### Custom install location (macOS / Linux)
 
 Set `SWAVAN_INSTALL_DIR` before running the installer:
 
 ```sh
-# macOS / Linux
 SWAVAN_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
 ```
 
-```powershell
-# Windows
-$env:SWAVAN_INSTALL_DIR = "C:\Tools\swavan"
-irm https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex
-```
+### Platform support
+
+| Platform | CLI | Plugin tarballs |
+|---|:-:|:-:|
+| macOS universal (`darwin-universal`) | ✓ signed + notarised | ✓ |
+| Linux `x86_64` (musl) | ✓ | ✓ |
+| Linux `aarch64` (musl) | ✗ runner offline | ✗ runner offline |
+| Windows `x86_64` | ✓ | ✗ `openssh` crate is Unix-only |
+
+Missing legs are tracked as `TODO(re-enable)` blocks in [`release.yml`](https://github.com/swavan/cli/blob/main/.github/workflows/release.yml) and [`release-plugin.yml`](https://github.com/swavan/cli/blob/main/.github/workflows/release-plugin.yml).
 
 ### Manual download
 
