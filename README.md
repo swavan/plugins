@@ -1,6 +1,6 @@
 # Swavan CLI
 
-`swavan` is a command-line tool that installs, updates, and manages **plugins** — standalone binaries that extend host apps with new capabilities (Docker / Kubernetes management, AI terminal autocomplete, peer-to-peer sync, and more).
+`swavan` is a command-line tool that installs, updates, and manages **plugins** — standalone binaries that extend host apps with new capabilities (Docker / Kubernetes management, AI terminal autocomplete, peer-to-peer sync, AppRelay screen sharing, and more).
 
 This repo (`swavan/plugins`) is the public artifact registry. It hosts:
 
@@ -18,11 +18,12 @@ This repo (`swavan/plugins`) is the public artifact registry. It hosts:
 curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
 ```
 
-The script downloads the latest signed `swavan` binary for your platform, verifies its SHA-256 checksum, and installs it to `~/.local/bin/swavan`.
+Downloads the latest signed `swavan` binary for your platform, verifies its SHA-256 checksum, and installs every binary in the tarball (`swavan` + sibling tools like `swavan-plugin-shell`) into `~/.local/bin/`.
 
-### Windows (Comming soon)
+### Windows
 
 ```powershell
+irm https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex
 ```
 
 Installs to `%LOCALAPPDATA%\Programs\Swavan\bin\swavan.exe`.
@@ -32,7 +33,14 @@ Installs to `%LOCALAPPDATA%\Programs\Swavan\bin\swavan.exe`.
 Set `SWAVAN_INSTALL_DIR` before running the installer:
 
 ```sh
+# macOS / Linux
 SWAVAN_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
+```
+
+```powershell
+# Windows
+$env:SWAVAN_INSTALL_DIR = "C:\Tools\swavan"
+irm https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex
 ```
 
 ### Manual download
@@ -50,6 +58,21 @@ Verify:
 ```sh
 swavan --help
 ```
+
+---
+
+## Commands at a glance
+
+```
+swavan plugin       Manage plugins (install/list/enable/disable/inspect/update/...)
+swavan launch       Open a plugin in its own native window (standalone mode)
+swavan apprelay     Manage AppRelay server integration
+swavan update       Update installed plugins to the latest version
+swavan self-update  Update the swavan CLI itself
+swavan completions  Print a shell completion script
+```
+
+Run any of them with `--help` for full options.
 
 ---
 
@@ -90,14 +113,17 @@ swavan plugin <TAB>
 swavan self-update
 ```
 
-Re-running the install script also works — it overwrites the existing binary.
+Re-running the install script also works — it overwrites the existing binaries.
 
 ### Update plugins
 
 ```sh
-swavan plugin update                    # update everything
-swavan plugin update swavan-container   # update one plugin
+swavan update                           # update every installed plugin
+swavan plugin update                    # same thing, longer form
+swavan plugin update swavan-container   # update a single plugin
 ```
+
+The CLI fetches the latest release that satisfies each plugin's `min_app_version` constraint — outdated CLIs stay on the last compatible plugin release rather than pulling a version that needs a newer host.
 
 ---
 
@@ -142,12 +168,12 @@ The catalog is sourced from [`catalog.json`](catalog.json) in this repo.
 swavan plugin install swavan-container
 ```
 
-The CLI fetches the latest release for your platform from `https://github.com/swavan/plugins/releases`, verifies the SHA-256 checksum, validates the bundled `manifest.json`, and unpacks the binary into the per-OS plugin directory shown above.
+The CLI fetches the latest release for your platform from `https://github.com/swavan/plugins/releases`, verifies the SHA-256 checksum, validates the bundled `manifest.json` (including `min_app_version`), and unpacks the binary + UI into the per-OS plugin directory shown above.
 
 Pin a specific version:
 
 ```sh
-swavan plugin install swavan-container --version 0.1.1
+swavan plugin install swavan-container --version 0.1.2
 ```
 
 ### List installed plugins
@@ -163,12 +189,29 @@ swavan plugin disable swavan-container   # keep files, stop loading it
 swavan plugin enable  swavan-container
 ```
 
-### Inspect / status / debug
+### Daemon controls
+
+Most plugins ship a long-running daemon. The host app starts it on demand, but you can also drive it manually for debugging:
 
 ```sh
-swavan plugin inspect swavan-container   # manifest + JSON-RPC examples
-swavan plugin status  swavan-container   # is the daemon running?
-swavan plugin ping    swavan-container   # round-trip a status request
+swavan plugin start-daemon swavan-container
+swavan plugin stop-daemon  swavan-container
+swavan plugin status       swavan-container   # is the daemon running?
+swavan plugin ping         swavan-container   # round-trip a status JSON-RPC call
+```
+
+### Inspect
+
+```sh
+swavan plugin inspect swavan-container   # manifest + example JSON-RPC calls
+```
+
+### Reconcile state
+
+If you've moved files around by hand, ask the CLI to resync its database with what's actually on disk:
+
+```sh
+swavan plugin sync
 ```
 
 ### Run as a standalone window
@@ -178,6 +221,8 @@ If a plugin's manifest sets `standalone.enabled = true`, you can launch its UI i
 ```sh
 swavan launch swavan-container
 ```
+
+The window is hosted by `swavan-plugin-shell` (installed alongside the CLI) — a Tauri-based shell that owns the daemon lifecycle, forwards JSON-RPC + push events to the renderer, and follows the OS light/dark theme. Useful for headless dev environments and for plugins that don't need to be embedded in SSH Studio.
 
 ### Uninstall
 
