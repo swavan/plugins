@@ -172,16 +172,6 @@ The full list lives in [`catalog.json`](catalog.json) and is the source of truth
 
 ---
 
-## Build your own plugin
-
-A Swavan plugin is a standalone binary that speaks JSON-RPC 2.0 over a Unix socket (macOS/Linux) or named pipe (Windows). The host launches it on demand and authenticates every call with a per-launch session token.
-
-The contract is documented in [`PLUGIN_SPEC.md`](https://github.com/swavan/cli/blob/main/PLUGIN_SPEC.md) — manifest schema, transport handshake, capability registration, lifecycle, and an example end-to-end exchange.
-
-Once your plugin is published as a GitHub Release with a `manifest.json` and per-platform `tar.gz` archives, open a PR against [`catalog.json`](catalog.json) to make it discoverable from `swavan plugin search`.
-
----
-
 ## Reporting issues
 
 - CLI bugs → <https://github.com/swavan/cli/issues>
