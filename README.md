@@ -20,10 +20,9 @@ curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
 
 The script downloads the latest signed `swavan` binary for your platform, verifies its SHA-256 checksum, and installs it to `~/.local/bin/swavan`.
 
-### Windows
+### Windows (Comming soon)
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex
 ```
 
 Installs to `%LOCALAPPDATA%\Programs\Swavan\bin\swavan.exe`.
