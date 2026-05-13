@@ -15,7 +15,7 @@ This repo (`swavan/plugins`) is the public artifact registry. It hosts:
 ### macOS / Linux
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
+curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
 ```
 
 The script downloads the latest signed `swavan` binary for your platform, verifies its SHA-256 checksum, and installs it to `~/.local/bin/swavan`.
@@ -33,7 +33,7 @@ Installs to `%LOCALAPPDATA%\Programs\Swavan\bin\swavan.exe`.
 Set `SWAVAN_INSTALL_DIR` before running the installer:
 
 ```sh
-SWAVAN_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
+SWAVAN_INSTALL_DIR=/usr/local/bin curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh
 ```
 
 ### Manual download
