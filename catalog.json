@@ -10,7 +10,7 @@
   },
   {
     "name": "swavan-p2p",
-    "version": "0.4.5",
+    "version": "0.4.7",
     "description": "P2pP \u2014 libp2p-based peer discovery, messaging, and same-LAN file transfer."
   }
 ]
