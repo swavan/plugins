@@ -7,5 +7,10 @@
   {
     "name": "swavan-terminal-auto-complete",
     "description": "AI-powered terminal autocomplete"
+  },
+  {
+    "name": "swavan-p2p",
+    "version": "0.4.4",
+    "description": "P2pP \u2014 libp2p-based peer discovery, messaging, and same-LAN file transfer."
   }
 ]
