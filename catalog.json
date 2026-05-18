@@ -1,7 +1,7 @@
 [
   {
     "name": "swavan-container",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Docker and Kubernetes manager for Swavan SSH Studio"
   },
   {
