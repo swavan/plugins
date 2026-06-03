@@ -12,5 +12,10 @@
     "name": "swavan-p2p",
     "version": "0.4.9",
     "description": "P2pP \u2014 libp2p-based peer discovery, messaging, and same-LAN file transfer."
+  },
+  {
+    "name": "swavan-vnc",
+    "version": "0.1.0",
+    "description": "VNC client \u2014 RFB protocol over SSH bastion or direct TCP. Connection vault, multi-session, cross-platform."
   }
 ]
