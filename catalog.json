@@ -22,5 +22,10 @@
     "name": "swavan-ssh",
     "version": "0.1.0",
     "description": "SSH target manager + workspace \u2014 multi-host Filesystem, Pty, Executor over the Swavan workspace contract."
+  },
+  {
+    "name": "swavan-terminal",
+    "version": "0.1.0",
+    "description": "Local-target terminal & file workspace \u2014 Filesystem, Executor, Transfer, Pty over the Swavan workspace contract."
   }
 ]
