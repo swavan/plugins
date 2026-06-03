@@ -17,5 +17,10 @@
     "name": "swavan-vnc",
     "version": "0.1.0",
     "description": "VNC client \u2014 RFB protocol over SSH bastion or direct TCP. Connection vault, multi-session, cross-platform."
+  },
+  {
+    "name": "swavan-ssh",
+    "version": "0.1.0",
+    "description": "SSH target manager + workspace \u2014 multi-host Filesystem, Pty, Executor over the Swavan workspace contract."
   }
 ]
