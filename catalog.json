@@ -27,5 +27,10 @@
     "name": "swavan-terminal",
     "version": "0.2.0",
     "description": "Local-target terminal & file workspace \u2014 Filesystem, Executor, Transfer, Pty over the Swavan workspace contract."
+  },
+  {
+    "name": "termo",
+    "version": "0.1.0",
+    "description": "Termo \u2014 a fast native terminal & file workspace, installed as a standalone app."
   }
 ]
