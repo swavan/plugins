@@ -1,0 +1,8 @@
+[
+  {
+    "name": "syntect",
+    "kind": "highlighter",
+    "version": "0.1.0",
+    "description": "syntect-based syntax highlighting (broad language coverage, pure-Rust)"
+  }
+]
