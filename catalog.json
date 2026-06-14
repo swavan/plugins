@@ -32,5 +32,10 @@
     "name": "termo",
     "version": "0.1.7",
     "description": "Termo \u2014 a fast native terminal & file workspace, installed as a standalone app. Shares its scripts & snippets over a JSON-RPC daemon."
+  },
+  {
+    "name": "conto",
+    "version": "0.1.6",
+    "description": "Docker and Kubernetes manager for Swavan SSH Studio"
   }
 ]
