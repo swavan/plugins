@@ -35,7 +35,7 @@
   },
   {
     "name": "conto",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "description": "Docker and Kubernetes manager for Swavan"
   }
 ]
