@@ -37,5 +37,10 @@
     "name": "conto",
     "version": "0.1.12",
     "description": "Docker and Kubernetes manager for Swavan"
+  },
+  {
+    "name": "s2com",
+    "version": "0.4.11",
+    "description": "P2pP \u2014 libp2p-based peer discovery, messaging, and same-LAN file transfer."
   }
 ]
