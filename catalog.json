@@ -42,5 +42,10 @@
     "name": "s2com",
     "version": "0.4.11",
     "description": "P2pP \u2014 libp2p-based peer discovery, messaging, and same-LAN file transfer."
+  },
+  {
+    "name": "s3h",
+    "version": "0.1.0",
+    "description": "SSH target manager + workspace \u2014 multi-host Filesystem, Pty, Executor over the Swavan workspace contract."
   }
 ]
