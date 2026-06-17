@@ -40,7 +40,7 @@
   },
   {
     "name": "s2com",
-    "version": "0.4.11",
+    "version": "0.4.12",
     "description": "P2pP \u2014 libp2p-based peer discovery, messaging, and same-LAN file transfer."
   },
   {
