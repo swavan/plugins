@@ -45,7 +45,7 @@
   },
   {
     "name": "s3h",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "SSH target manager + workspace \u2014 multi-host Filesystem, Pty, Executor over the Swavan workspace contract."
   }
 ]
