@@ -120,7 +120,7 @@ Re-running the install script also works — it overwrites the existing binaries
 ```sh
 swavan update                           # update every installed plugin
 swavan plugin update                    # same thing, longer form
-swavan plugin update swavan-container   # update a single plugin
+swavan plugin update conto   # update a single plugin
 ```
 
 The CLI fetches the latest release that satisfies each plugin's `min_app_version` constraint — outdated CLIs stay on the last compatible plugin release rather than pulling a version that needs a newer host.
@@ -165,7 +165,7 @@ The catalog is sourced from [`catalog.json`](catalog.json) in this repo.
 ### Install
 
 ```sh
-swavan plugin install swavan-container
+swavan plugin install conto
 ```
 
 The CLI fetches the latest release for your platform from `https://github.com/swavan/plugins/releases`, verifies the SHA-256 checksum, validates the bundled `manifest.json` (including `min_app_version`), and unpacks the binary + UI into the per-OS plugin directory shown above.
@@ -173,7 +173,7 @@ The CLI fetches the latest release for your platform from `https://github.com/sw
 Pin a specific version:
 
 ```sh
-swavan plugin install swavan-container --version 0.1.2
+swavan plugin install conto --version 0.1.2
 ```
 
 ### List installed plugins
@@ -185,8 +185,8 @@ swavan plugin list
 ### Enable / disable
 
 ```sh
-swavan plugin disable swavan-container   # keep files, stop loading it
-swavan plugin enable  swavan-container
+swavan plugin disable conto   # keep files, stop loading it
+swavan plugin enable  conto
 ```
 
 ### Daemon controls
@@ -194,16 +194,16 @@ swavan plugin enable  swavan-container
 Most plugins ship a long-running daemon. The host app starts it on demand, but you can also drive it manually for debugging:
 
 ```sh
-swavan plugin start-daemon swavan-container
-swavan plugin stop-daemon  swavan-container
-swavan plugin status       swavan-container   # is the daemon running?
-swavan plugin ping         swavan-container   # round-trip a status JSON-RPC call
+swavan plugin start-daemon conto
+swavan plugin stop-daemon  conto
+swavan plugin status       conto   # is the daemon running?
+swavan plugin ping         conto   # round-trip a status JSON-RPC call
 ```
 
 ### Inspect
 
 ```sh
-swavan plugin inspect swavan-container   # manifest + example JSON-RPC calls
+swavan plugin inspect conto   # manifest + example JSON-RPC calls
 ```
 
 ### Reconcile state
@@ -219,7 +219,7 @@ swavan plugin sync
 If a plugin's manifest sets `standalone.enabled = true`, you can launch its UI in its own native window without the host app:
 
 ```sh
-swavan launch swavan-container
+swavan launch conto
 ```
 
 The window is hosted by `swavan-plugin-shell` (installed alongside the CLI) — a Tauri-based shell that owns the daemon lifecycle, forwards JSON-RPC + push events to the renderer, and follows the OS light/dark theme. Useful for headless dev environments and for plugins that don't need to be embedded in SSH Studio.
@@ -227,7 +227,7 @@ The window is hosted by `swavan-plugin-shell` (installed alongside the CLI) — 
 ### Uninstall
 
 ```sh
-swavan plugin uninstall swavan-container
+swavan plugin uninstall conto
 ```
 
 ---
@@ -236,7 +236,7 @@ swavan plugin uninstall swavan-container
 
 | Name | Description |
 |---|---|
-| [`swavan-container`](https://github.com/swavan/plugins/releases?q=swavan-container) | Docker and Kubernetes manager for Swavan SSH Studio |
+| [`conto`](https://github.com/swavan/plugins/releases?q=conto) | Docker and Kubernetes manager for Swavan |
 | [`swavan-terminal-auto-complete`](https://github.com/swavan/plugins/releases?q=swavan-terminal-auto-complete) | AI-powered terminal autocomplete |
 
 The full list lives in [`catalog.json`](catalog.json) and is the source of truth for `swavan plugin search`.
