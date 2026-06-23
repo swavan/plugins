@@ -27,5 +27,10 @@
     "name": "s3h",
     "version": "0.1.6",
     "description": "SSH target manager + workspace \u2014 multi-host Filesystem, Pty, Executor over the Swavan workspace contract."
+  },
+  {
+    "name": "chitra",
+    "version": "0.1.0",
+    "description": "Chitra database client \u2014 a multi-driver TUI for relational, document, graph, and other databases."
   }
 ]
