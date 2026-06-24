@@ -6,7 +6,7 @@
     <title>Termo — Swavan terminal &amp; file workspace</title>
     <meta
       name="description"
-      content="Termo is a fast, native terminal and file workspace for Swavan: VS Code-style panes, an integrated PTY terminal, file preview, themes, and a scripts &amp; snippets library shared over JSON-RPC."
+      content="Termo is a fast, native terminal and file workspace for Swavan: split panes, an integrated PTY terminal, file preview, themes, and a scripts &amp; snippets library shared over JSON-RPC."
     />
     <style>
       :root {
@@ -732,7 +732,7 @@
                 <div class="kicker">Swavan plugin · termo</div>
                 <h1>The terminal that's also your editor.</h1>
                 <p class="lead">
-                  Termo is a native, VS Code-style workspace with a real integrated terminal:
+                  Termo is a native workspace with a real integrated terminal:
                   a file explorer, tabbed editor, split panes, file preview, and a reusable
                   scripts &amp; snippets library — installed as a standalone app and shared with
                   the Swavan host over JSON-RPC.
@@ -768,7 +768,7 @@
               </div>
               <div class="operator-list">
                 <span><b>workspace</b> explorer · editor · terminal</span>
-                <span><b>panes</b> VS Code-style splits</span>
+                <span><b>panes</b> split editor &amp; terminal</span>
                 <span><b>library</b> scripts · snippets · notes</span>
               </div>
             </div>
@@ -838,8 +838,8 @@ swavan plugin uninstall termo</code></pre>
               <h2>One window, everything in reach</h2>
             </div>
             <p>
-              A VS Code-style shell: workspace bar, file explorer, tabbed editor, integrated
-              terminal, and a status bar — rendered natively, with no Electron.
+              A single shell: workspace bar, file explorer, tabbed editor, integrated
+              terminal, and a status bar — rendered natively.
             </p>
           </div>
           <div class="feature-grid">
@@ -906,10 +906,10 @@ swavan plugin uninstall termo</code></pre>
             </article>
             <article class="tile feature-tile">
               <div class="feature-tag">Glyphs</div>
-              <h3>Emoji, symbols &amp; Nerd fonts</h3>
+              <h3>Emoji, symbols &amp; icon fonts</h3>
               <p>
                 Monochrome fallback fonts cover emoji, dingbats, technical symbols, and the
-                Private-Use areas where powerline / Nerd Font icons live — so TUIs render without
+                Private-Use areas where terminal icon glyphs live — so TUIs render without
                 tofu. Drop a font onto the window to swap the grid font live.
               </p>
             </article>
@@ -917,7 +917,7 @@ swavan plugin uninstall termo</code></pre>
               <div class="feature-tag">Highlighting</div>
               <h3>Optional syntax addon</h3>
               <p>
-                Syntax highlighting is a runtime-loaded addon (syntect), kept out of the core to
+                Syntax highlighting is a runtime-loaded addon, kept out of the core to
                 stay lean. With none installed, rendering is identical plain text at zero cost.
                 Toggle it in Settings → Appearance.
               </p>
