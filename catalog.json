@@ -35,7 +35,7 @@
   },
   {
     "name": "s3ht",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "S3HT \u2014 a native terminal UI for S3H SSH workspace management. Runs the same swavan-ssh backend as the S3H GUI with full SSH connection, tunnelling, and vault support."
   },
   {
