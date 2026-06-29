@@ -37,5 +37,10 @@
     "name": "s3ht",
     "version": "0.1.0",
     "description": "S3HT \u2014 a native terminal UI for S3H SSH workspace management. Runs the same swavan-ssh backend as the S3H GUI with full SSH connection, tunnelling, and vault support."
+  },
+  {
+    "name": "contot",
+    "version": "0.1.0",
+    "description": "Contot \u2014 a headless-friendly TUI for Docker and Kubernetes management. Full container/K8s feature parity with the Conto GUI, no browser required."
   }
 ]
