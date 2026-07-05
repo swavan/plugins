@@ -30,7 +30,7 @@
   },
   {
     "name": "chitra",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "description": "Chitra database client \u2014 a multi-driver TUI for relational, document, graph, and other databases."
   },
   {
