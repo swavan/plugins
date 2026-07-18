@@ -6,7 +6,7 @@
     <title>Swavan CLI Plugins</title>
     <meta
       name="description"
-      content="Install Swavan CLI and manage Swavan SSH, container, and terminal auto-complete plugins."
+      content="Install Swavan CLI and manage the Chitra database client plugin."
     />
     <style>
       :root {
@@ -680,7 +680,6 @@
           <a href="#install">Install</a>
           <a href="#plugins">Plugins</a>
           <a href="#manage">Manage</a>
-          <a href="#complete">Completion</a>
           <a href="./termo.html">Termo</a>
         </nav>
       </div>
@@ -719,8 +718,8 @@
 
               <div class="metrics" aria-label="Selected plugin summary">
                 <div class="metric">
-                  <strong>3</strong>
-                  <span>covered plugins</span>
+                  <strong>1</strong>
+                  <span>covered plugin</span>
                 </div>
                 <div class="metric">
                   <strong>2</strong>
@@ -738,12 +737,10 @@
             <div class="operator-top">
               <div class="selected-plugin">
                 <small>selected install target</small>
-                <strong>swavan-container</strong>
+                <strong>chitra</strong>
               </div>
               <div class="operator-list">
-                <span><b>ssh</b> remote workflow tools</span>
-                <span><b>container</b> Docker and Kubernetes manager</span>
-                <span><b>auto-complete</b> AI terminal suggestions</span>
+                <span><b>chitra</b> multi-driver database TUI</span>
               </div>
             </div>
             <div class="terminal">
@@ -753,11 +750,9 @@
                 <span class="dot"></span>
               </div>
               <pre><code><span class="prompt">$</span> swavan plugin search
-swavan-ssh
-swavan-container
-swavan-terminal-auto-complete
+chitra
 
-<span class="prompt">$</span> swavan plugin install swavan-container
+<span class="prompt">$</span> swavan plugin install chitra
 Installing plugin...
 Ready.</code></pre>
             </div>
@@ -798,43 +793,21 @@ swavan update</code></pre>
           <div class="module-head">
             <div>
               <div class="kicker">02 / selected plugins</div>
-              <h2>Three public plugin lanes</h2>
+              <h2>Public plugin lane</h2>
             </div>
-            <p>Only these plugins are documented here.</p>
+            <p>Only this plugin is documented here.</p>
           </div>
           <div class="plugin-grid">
             <article class="tile plugin-tile">
               <div>
-                <span class="plugin-id">swavan-ssh</span>
-                <h3>SSH workflow tools</h3>
+                <span class="plugin-id">chitra</span>
+                <h3>Database client TUI</h3>
                 <p>
-                  Adds SSH-focused capabilities for working with remote machines from Swavan,
-                  including connection-oriented tooling and operational helpers.
+                  A multi-driver terminal client for relational, document, graph, and other
+                  databases, with browsing and query workflows from one Swavan plugin interface.
                 </p>
               </div>
-              <div class="plugin-type">remote operations lane</div>
-            </article>
-            <article class="tile plugin-tile">
-              <div>
-                <span class="plugin-id">swavan-container</span>
-                <h3>Docker and Kubernetes manager</h3>
-                <p>
-                  Helps inspect and manage containers, images, pods, and related runtime state from
-                  a Swavan plugin interface.
-                </p>
-              </div>
-              <div class="plugin-type">runtime control lane</div>
-            </article>
-            <article class="tile plugin-tile">
-              <div>
-                <span class="plugin-id">swavan-terminal-auto-complete</span>
-                <h3>AI terminal auto-complete</h3>
-                <p>
-                  Provides AI-assisted command suggestions while working in the terminal, helping
-                  speed up repetitive shell and remote-session workflows.
-                </p>
-              </div>
-              <div class="plugin-type">terminal assist lane</div>
+              <div class="plugin-type">database client lane</div>
             </article>
           </div>
         </section>
@@ -846,8 +819,7 @@ swavan update</code></pre>
               <h2>Add, inspect, update, remove</h2>
             </div>
             <p>
-              Replace the example name with <code>swavan-ssh</code>,
-              <code>swavan-container</code>, or <code>swavan-terminal-auto-complete</code>.
+              Replace the example name with <code>chitra</code>.
             </p>
           </div>
           <div class="command-grid">
@@ -857,7 +829,7 @@ swavan update</code></pre>
             </div>
             <div class="tile">
               <div class="command-title">Install</div>
-              <pre><code>swavan plugin install swavan-container</code></pre>
+              <pre><code>swavan plugin install chitra</code></pre>
             </div>
             <div class="tile">
               <div class="command-title">List</div>
@@ -865,17 +837,17 @@ swavan update</code></pre>
             </div>
             <div class="tile">
               <div class="command-title">Remove</div>
-              <pre><code>swavan plugin uninstall swavan-container</code></pre>
+              <pre><code>swavan plugin uninstall chitra</code></pre>
             </div>
             <div class="tile">
               <div class="command-title">Enable or disable</div>
-              <pre><code>swavan plugin disable swavan-container
-swavan plugin enable swavan-container</code></pre>
+              <pre><code>swavan plugin disable chitra
+swavan plugin enable chitra</code></pre>
             </div>
             <div class="tile">
               <div class="command-title">Inspect or update</div>
-              <pre><code>swavan plugin inspect swavan-container
-swavan plugin update swavan-container</code></pre>
+              <pre><code>swavan plugin inspect chitra
+swavan plugin update chitra</code></pre>
             </div>
           </div>
         </section>
@@ -911,8 +883,7 @@ swavan plugin update swavan-container</code></pre>
           </div>
           <p class="note">
             This page documents Swavan CLI usage and the selected public plugin information:
-            <code>swavan-ssh</code>, <code>swavan-container</code>, and
-            <code>swavan-terminal-auto-complete</code>.
+            <code>chitra</code>.
           </p>
         </section>
 
