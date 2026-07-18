@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Swavan CLI Plugins</title>
+    <title>Termo — Swavan terminal &amp; file workspace</title>
     <meta
       name="description"
-      content="Install Swavan CLI and manage Swavan SSH, container, and terminal auto-complete plugins."
+      content="Termo is a fast, native terminal and file workspace for Swavan: split panes, an integrated PTY terminal, file preview, themes, and a scripts &amp; snippets library shared over JSON-RPC."
     />
     <style>
       :root {
@@ -454,6 +454,10 @@
         color: var(--teal-2);
       }
 
+      .cmt {
+        color: var(--muted);
+      }
+
       section.module {
         border: 1px solid var(--line);
         border-radius: 24px;
@@ -483,7 +487,7 @@
       }
 
       .install-grid,
-      .plugin-grid,
+      .feature-grid,
       .command-grid,
       .complete-grid {
         display: grid;
@@ -497,7 +501,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .plugin-grid {
+      .feature-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
@@ -518,30 +522,19 @@
         color: var(--muted);
       }
 
-      .plugin-tile {
-        min-height: 260px;
+      .feature-tile {
+        min-height: 210px;
         display: grid;
-        align-content: space-between;
+        align-content: start;
+        gap: 6px;
       }
 
-      .plugin-id {
-        display: inline-flex;
-        align-items: center;
-        max-width: 100%;
-        min-height: 30px;
-        padding: 0 10px;
-        border: 1px solid var(--line-2);
-        border-radius: 999px;
-        background: var(--teal-3);
+      .feature-tag {
         color: var(--teal-2);
         font-size: 0.78rem;
-        font-weight: 780;
-        overflow-wrap: anywhere;
-      }
-
-      .plugin-type {
-        color: var(--muted);
-        font-size: 0.84rem;
+        font-weight: 820;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
       }
 
       .command-title {
@@ -550,6 +543,35 @@
         font-weight: 820;
         letter-spacing: 0.12em;
         text-transform: uppercase;
+      }
+
+      .keys {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .key-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 14px 22px;
+        background: var(--panel-2);
+        color: var(--muted);
+      }
+
+      .key-row kbd {
+        flex: none;
+        border: 1px solid var(--line-2);
+        border-radius: 8px;
+        background: var(--white-7);
+        padding: 4px 9px;
+        color: var(--ink);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 0.82rem;
+        white-space: nowrap;
       }
 
       .note {
@@ -596,7 +618,8 @@
         .install-grid,
         .command-grid,
         .complete-grid,
-        .plugin-grid {
+        .feature-grid,
+        .keys {
           grid-template-columns: 1fr;
         }
 
@@ -669,19 +692,19 @@
   <body>
     <header class="topbar">
       <div class="shell topbar-inner">
-        <a class="brand" href="#top" aria-label="Swavan CLI home">
-          <span class="brand-mark">S</span>
-          <span>Swavan CLI</span>
+        <a class="brand" href="#top" aria-label="Termo home">
+          <span class="brand-mark">T</span>
+          <span>Termo</span>
         </a>
         <div class="status-strip">
-          <span>public registry / selected plugins only / release artifacts</span>
+          <span>native standalone app / JSON-RPC daemon / macOS · Linux · Windows</span>
         </div>
         <nav class="nav" aria-label="Primary navigation">
           <a href="#install">Install</a>
-          <a href="#plugins">Plugins</a>
-          <a href="#manage">Manage</a>
-          <a href="#complete">Completion</a>
-          <a href="./termo.html">Termo</a>
+          <a href="#workspace">Workspace</a>
+          <a href="#shortcuts">Shortcuts</a>
+          <a href="#cli">CLI</a>
+          <a href="#daemon">Daemon</a>
         </nav>
       </div>
     </header>
@@ -689,61 +712,64 @@
     <main id="top" class="shell deck">
       <aside class="rail" aria-label="Page sections">
         <div class="rail-head">
-          <div class="rail-kicker">Command deck</div>
-          <div class="rail-title">Operate Swavan plugins from one CLI surface.</div>
+          <div class="rail-kicker">Termo</div>
+          <div class="rail-title">A fast native terminal &amp; file workspace for Swavan.</div>
         </div>
         <div class="rail-links">
-          <a href="#install"><span class="rail-dot"></span><span>Install CLI</span></a>
-          <a href="#plugins"><span class="rail-dot"></span><span>Plugin set</span></a>
-          <a href="#manage"><span class="rail-dot"></span><span>Lifecycle</span></a>
-          <a href="#complete"><span class="rail-dot"></span><span>Shell setup</span></a>
+          <a href="#install"><span class="rail-dot"></span><span>Install &amp; launch</span></a>
+          <a href="#workspace"><span class="rail-dot"></span><span>The workspace</span></a>
+          <a href="#shortcuts"><span class="rail-dot"></span><span>Keyboard</span></a>
+          <a href="#cli"><span class="rail-dot"></span><span>Command line</span></a>
+          <a href="#daemon"><span class="rail-dot"></span><span>Daemon protocol</span></a>
         </div>
       </aside>
 
       <div class="panel-stack">
-        <section class="hero-console" aria-label="Swavan CLI overview">
+        <section class="hero-console" aria-label="Termo overview">
           <div class="intro">
             <div class="intro-body">
               <div>
-                <div class="kicker">Public plugin registry</div>
-                <h1>Swavan CLI plugin control surface.</h1>
+                <div class="kicker">Swavan plugin · termo</div>
+                <h1>The terminal that's also your editor.</h1>
                 <p class="lead">
-                  Install the CLI, discover public plugin releases, and manage the selected Swavan
-                  plugins from a compact command surface.
+                  Termo is a native workspace with a real integrated terminal:
+                  a file explorer, tabbed editor, split panes, file preview, and a reusable
+                  scripts &amp; snippets library — installed as a standalone app and shared with
+                  the Swavan host over JSON-RPC.
                 </p>
                 <div class="quick-actions">
-                  <a class="button primary" href="#install">Install CLI</a>
-                  <a class="button" href="#manage">Build commands</a>
+                  <a class="button primary" href="#install">Install termo</a>
+                  <a class="button" href="#daemon">Daemon protocol</a>
                 </div>
               </div>
 
-              <div class="metrics" aria-label="Selected plugin summary">
+              <div class="metrics" aria-label="Termo summary">
                 <div class="metric">
                   <strong>3</strong>
-                  <span>covered plugins</span>
+                  <span>platforms — macOS, Linux, Windows</span>
                 </div>
                 <div class="metric">
-                  <strong>2</strong>
-                  <span>installer paths</span>
+                  <strong>14</strong>
+                  <span>built-in chrome themes</span>
                 </div>
                 <div class="metric">
                   <strong>1</strong>
-                  <span>public release source</span>
+                  <span>binary: GUI app + RPC daemon</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <aside class="operator-card" aria-label="Selected plugin console">
+          <aside class="operator-card" aria-label="Termo install console">
             <div class="operator-top">
               <div class="selected-plugin">
-                <small>selected install target</small>
-                <strong>swavan-container</strong>
+                <small>install target</small>
+                <strong>termo</strong>
               </div>
               <div class="operator-list">
-                <span><b>ssh</b> remote workflow tools</span>
-                <span><b>container</b> Docker and Kubernetes manager</span>
-                <span><b>auto-complete</b> AI terminal suggestions</span>
+                <span><b>workspace</b> explorer · editor · terminal</span>
+                <span><b>panes</b> split editor &amp; terminal</span>
+                <span><b>library</b> scripts · snippets · notes</span>
               </div>
             </div>
             <div class="terminal">
@@ -752,14 +778,12 @@
                 <span class="dot"></span>
                 <span class="dot"></span>
               </div>
-              <pre><code><span class="prompt">$</span> swavan plugin search
-swavan-ssh
-swavan-container
-swavan-terminal-auto-complete
-
-<span class="prompt">$</span> swavan plugin install swavan-container
+              <pre><code><span class="prompt">$</span> swavan plugin install termo
 Installing plugin...
-Ready.</code></pre>
+Ready.
+
+<span class="prompt">$</span> swavan launch termo      <span class="cmt"># native GUI</span>
+<span class="prompt">$</span> termo .                   <span class="cmt"># or open the cwd</span></code></pre>
             </div>
           </aside>
         </section>
@@ -768,159 +792,264 @@ Ready.</code></pre>
           <div class="module-head">
             <div>
               <div class="kicker">01 / bootstrap</div>
-              <h2>Install the CLI</h2>
+              <h2>Install &amp; launch</h2>
             </div>
-            <p>Install from the public Swavan plugin repository, then verify the binary.</p>
+            <p>
+              Termo installs through the <code>swavan</code> CLI. Because it's a native
+              standalone app, install also wires up an app-directory entry and an on-PATH
+              <code>termo</code> command.
+            </p>
           </div>
           <div class="install-grid">
             <div class="tile">
-              <div class="command-title">macOS and Linux</div>
-              <pre><code>curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install.sh | sh</code></pre>
+              <div class="command-title">Install</div>
+              <pre><code><span class="cmt"># needs the swavan CLI — see swavan/plugins</span>
+swavan plugin install termo</code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Windows PowerShell</div>
-              <pre><code>irm https://raw.githubusercontent.com/swavan/plugins/main/install.ps1 | iex</code></pre>
+              <div class="command-title">Launch the GUI</div>
+              <pre><code>swavan launch termo
+<span class="cmt"># or, from any terminal, the installed command:</span>
+termo            <span class="cmt"># open the current directory</span></code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Verify</div>
-              <pre><code>swavan --help
-swavan plugin search</code></pre>
+              <div class="command-title">Open a path</div>
+              <pre><code>termo ~/code/project   <span class="cmt"># root at a folder</span>
+termo ./notes.md       <span class="cmt"># open a file in the editor</span></code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Update</div>
-              <pre><code>swavan self-update
-swavan update</code></pre>
+              <div class="command-title">Update / remove</div>
+              <pre><code>swavan plugin update termo
+swavan plugin uninstall termo</code></pre>
             </div>
           </div>
+          <p class="note">
+            Installing termo also adds an app launcher (macOS <code>~/Applications/Termo.app</code>,
+            a Linux <code>.desktop</code> entry, or a Windows Start-Menu shortcut) and a
+            <code>termo</code> command next to the <code>swavan</code> binary. Both update on
+            <code>swavan plugin update</code> and are removed on uninstall.
+          </p>
         </section>
 
-        <section id="plugins" class="module">
+        <section id="workspace" class="module">
           <div class="module-head">
             <div>
-              <div class="kicker">02 / selected plugins</div>
-              <h2>Three public plugin lanes</h2>
-            </div>
-            <p>Only these plugins are documented here.</p>
-          </div>
-          <div class="plugin-grid">
-            <article class="tile plugin-tile">
-              <div>
-                <span class="plugin-id">swavan-ssh</span>
-                <h3>SSH workflow tools</h3>
-                <p>
-                  Adds SSH-focused capabilities for working with remote machines from Swavan,
-                  including connection-oriented tooling and operational helpers.
-                </p>
-              </div>
-              <div class="plugin-type">remote operations lane</div>
-            </article>
-            <article class="tile plugin-tile">
-              <div>
-                <span class="plugin-id">swavan-container</span>
-                <h3>Docker and Kubernetes manager</h3>
-                <p>
-                  Helps inspect and manage containers, images, pods, and related runtime state from
-                  a Swavan plugin interface.
-                </p>
-              </div>
-              <div class="plugin-type">runtime control lane</div>
-            </article>
-            <article class="tile plugin-tile">
-              <div>
-                <span class="plugin-id">swavan-terminal-auto-complete</span>
-                <h3>AI terminal auto-complete</h3>
-                <p>
-                  Provides AI-assisted command suggestions while working in the terminal, helping
-                  speed up repetitive shell and remote-session workflows.
-                </p>
-              </div>
-              <div class="plugin-type">terminal assist lane</div>
-            </article>
-          </div>
-        </section>
-
-        <section id="manage" class="module">
-          <div class="module-head">
-            <div>
-              <div class="kicker">03 / lifecycle</div>
-              <h2>Add, inspect, update, remove</h2>
+              <div class="kicker">02 / the workspace</div>
+              <h2>One window, everything in reach</h2>
             </div>
             <p>
-              Replace the example name with <code>swavan-ssh</code>,
-              <code>swavan-container</code>, or <code>swavan-terminal-auto-complete</code>.
+              A single shell: workspace bar, file explorer, tabbed editor, integrated
+              terminal, and a status bar — rendered natively.
+            </p>
+          </div>
+          <div class="feature-grid">
+            <article class="tile feature-tile">
+              <div class="feature-tag">Panes</div>
+              <h3>Recursive splits</h3>
+              <p>
+                Split the content area horizontally or vertically into a tree of panes. Every
+                leaf is a unified tab group that mixes editor files and terminals; drag a tab to
+                another pane to move or re-split it.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Terminal</div>
+              <h3>A real PTY shell</h3>
+              <p>
+                Each terminal hosts your <code>$SHELL</code> in a pseudo-terminal with full
+                <code>xterm-256color</code>, scrollback, mouse selection, copy/paste, and even
+                Sixel inline graphics. Drop a file onto a terminal to type its quoted path.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Explorer</div>
+              <h3>Lazy file tree</h3>
+              <p>
+                Browse, create, rename, copy, move, and delete files from the sidebar with
+                drag-and-drop and a right-click menu. <b>Sync to Terminal</b> re-roots the tree at
+                the focused shell's live working directory.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Editor</div>
+              <h3>Tabbed editing</h3>
+              <p>
+                Open files in editable tabs with selection, undo/redo, and save. Each split
+                editor scrolls independently; rendering is virtualized so large files stay fast.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Preview</div>
+              <h3>Inline file preview</h3>
+              <p>
+                Images and SVGs render in-pane; PDFs and HTML open in your OS default app via a
+                preview card. Text-based kinds toggle between rendered preview and source.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Library</div>
+              <h3>Scripts, snippets &amp; notes</h3>
+              <p>
+                Keep reusable command snippets, runnable scripts, and Markdown notes in the
+                explorer accordion. Scripts carry a danger flag plus a heuristic destructive-command
+                check, with a confirmation gate before running.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Themes</div>
+              <h3>14 chrome themes</h3>
+              <p>
+                Neutral Dark / Midnight / Light, Evergreen, and five hue families each in light
+                and dark. The terminal's base palette follows the active theme. Switch from the
+                status-bar pill or Settings → Appearance.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Glyphs</div>
+              <h3>Emoji, symbols &amp; icon fonts</h3>
+              <p>
+                Monochrome fallback fonts cover emoji, dingbats, technical symbols, and the
+                Private-Use areas where terminal icon glyphs live — so TUIs render without
+                tofu. Drop a font onto the window to swap the grid font live.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Highlighting</div>
+              <h3>Optional syntax addon</h3>
+              <p>
+                Syntax highlighting is a runtime-loaded addon, kept out of the core to
+                stay lean. With none installed, rendering is identical plain text at zero cost.
+                Toggle it in Settings → Appearance.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="shortcuts" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">03 / keyboard</div>
+              <h2>Shortcuts</h2>
+            </div>
+            <p>
+              Editor shortcuts use <kbd>Cmd</kbd> on macOS, <kbd>Ctrl</kbd> elsewhere. The app
+              chords marked <b>†</b> — sidebar, new terminal, and terminal copy/paste — use
+              <kbd>Cmd</kbd> on macOS but <kbd>Ctrl</kbd>+<kbd>Shift</kbd> on Linux &amp; Windows,
+              leaving <kbd>Ctrl-C</kbd> as SIGINT in the terminal.
+            </p>
+          </div>
+          <div class="keys">
+            <div class="key-row"><span>Toggle the sidebar <b>†</b></span><kbd>Cmd&nbsp;B</kbd></div>
+            <div class="key-row"><span>Open a terminal in the focused pane <b>†</b></span><kbd>Cmd&nbsp;J</kbd></div>
+            <div class="key-row"><span>Copy / paste (terminal) <b>†</b></span><kbd>Cmd&nbsp;C&nbsp;/&nbsp;V</kbd></div>
+            <div class="key-row"><span>Save the active file</span><kbd>Cmd&nbsp;S</kbd></div>
+            <div class="key-row"><span>Undo / redo</span><kbd>Cmd&nbsp;Z&nbsp;/&nbsp;⇧Z</kbd></div>
+            <div class="key-row"><span>Select all</span><kbd>Cmd&nbsp;A</kbd></div>
+            <div class="key-row"><span>Cut / copy / paste (editor)</span><kbd>Cmd&nbsp;X·C·V</kbd></div>
+            <div class="key-row"><span>Rename a terminal / workspace tab</span><kbd>Double-click</kbd></div>
+          </div>
+          <p class="note">
+            More controls live in the chrome: the workspace-bar gear opens
+            <b>Settings</b> (Appearance · Shortcuts · Scripts), the status bar has Explorer-toggle,
+            New-Terminal, and theme-cycle pills, and every pane has its own add / split-vertical /
+            split-horizontal buttons.
+          </p>
+        </section>
+
+        <section id="cli" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">04 / command line</div>
+              <h2>Manage the library headlessly</h2>
+            </div>
+            <p>
+              Termo is GUI-first, but the same binary manages scripts, snippets, and notes from
+              the shell — no window opens. Changes show up in the GUI after a refresh, and vice
+              versa.
             </p>
           </div>
           <div class="command-grid">
             <div class="tile">
-              <div class="command-title">Find</div>
-              <pre><code>swavan plugin search</code></pre>
+              <div class="command-title">Open</div>
+              <pre><code>termo                  <span class="cmt"># GUI at the cwd</span>
+termo &lt;dir&gt;             <span class="cmt"># root at a folder</span>
+termo &lt;file&gt;            <span class="cmt"># file in the editor</span>
+termo open &lt;path&gt;       <span class="cmt"># force path parse</span></code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Install</div>
-              <pre><code>swavan plugin install swavan-container</code></pre>
+              <div class="command-title">Scripts</div>
+              <pre><code>termo --script --append &lt;name&gt; "..."
+termo --script --edit   &lt;name&gt; "..."
+termo --script --remove &lt;name&gt; -y
+termo --script &lt;name&gt; exec   <span class="cmt"># danger → -y</span></code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">List</div>
-              <pre><code>swavan plugin list</code></pre>
+              <div class="command-title">Snippets</div>
+              <pre><code>termo --snippet --create &lt;name&gt; "..."
+termo --snippet &lt;name&gt; exec   <span class="cmt"># run in $SHELL</span></code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Remove</div>
-              <pre><code>swavan plugin uninstall swavan-container</code></pre>
-            </div>
-            <div class="tile">
-              <div class="command-title">Enable or disable</div>
-              <pre><code>swavan plugin disable swavan-container
-swavan plugin enable swavan-container</code></pre>
-            </div>
-            <div class="tile">
-              <div class="command-title">Inspect or update</div>
-              <pre><code>swavan plugin inspect swavan-container
-swavan plugin update swavan-container</code></pre>
-            </div>
-          </div>
-        </section>
-
-        <section id="complete" class="module">
-          <div class="module-head">
-            <div>
-              <div class="kicker">04 / shell setup</div>
-              <h2>Completion scripts</h2>
-            </div>
-            <p>
-              Generate shell completion scripts from the CLI, then restart the shell and try
-              <code>swavan plugin &lt;TAB&gt;</code>.
-            </p>
-          </div>
-          <div class="complete-grid">
-            <div class="tile">
-              <div class="command-title">zsh</div>
-              <pre><code>swavan completions zsh &gt; "${fpath[1]}/_swavan"</code></pre>
-            </div>
-            <div class="tile">
-              <div class="command-title">bash</div>
-              <pre><code>swavan completions bash | sudo tee /usr/local/etc/bash_completion.d/swavan &gt;/dev/null</code></pre>
-            </div>
-            <div class="tile">
-              <div class="command-title">fish</div>
-              <pre><code>swavan completions fish &gt; ~/.config/fish/completions/swavan.fish</code></pre>
-            </div>
-            <div class="tile">
-              <div class="command-title">PowerShell</div>
-              <pre><code>swavan completions powershell | Out-String | Invoke-Expression</code></pre>
+              <div class="command-title">Notes</div>
+              <pre><code>termo --note --create &lt;name&gt; "..."
+termo --note --append &lt;name&gt; "..."
+termo --note --edit   &lt;name&gt; "..."
+termo --note --remove &lt;name&gt; -y   <span class="cmt"># not runnable</span></code></pre>
             </div>
           </div>
           <p class="note">
-            This page documents Swavan CLI usage and the selected public plugin information:
-            <code>swavan-ssh</code>, <code>swavan-container</code>, and
-            <code>swavan-terminal-auto-complete</code>.
+            File names are validated (no path separators or <code>..</code>), so a CLI caller
+            can't escape the library directories. <code>--remove</code> refuses without
+            <code>-y</code>/<code>--yes</code>, and running a script flagged dangerous — manually
+            or by the destructive-pattern heuristic — also requires <code>-y</code>, mirroring the
+            GUI's confirmation dialog.
+          </p>
+        </section>
+
+        <section id="daemon" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">05 / integration</div>
+              <h2>JSON-RPC daemon</h2>
+            </div>
+            <p>
+              Run with <code>--socket</code>, termo exposes its scripts &amp; snippets library to
+              the Swavan host (or any client) over NDJSON JSON-RPC 2.0 — a Unix socket on
+              macOS/Linux, a named pipe on Windows. The GUI and daemon never share a process.
+            </p>
+          </div>
+          <div class="install-grid">
+            <div class="tile">
+              <div class="command-title">Methods</div>
+              <pre><code>status
+library.list      <span class="cmt"># ?kind = snippet|script</span>
+library.get       <span class="cmt"># { kind, name }</span>
+library.write     <span class="cmt"># mode: create|overwrite|append</span>
+library.remove
+library.run       <span class="cmt"># no danger gate — check first</span>
+library.set_meta  <span class="cmt"># scripts: danger / info</span></code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Example session (NDJSON)</div>
+              <pre><code>→ {"id":1,"method":"status"}
+← {"jsonrpc":"2.0","id":1,"result":{"name":"termo",…}}
+→ {"id":2,"method":"library.run",
+   "params":{"kind":"snippet","name":"hi.sh"}}
+← {"jsonrpc":"2.0","id":2,"result":
+   {"exit_code":0,"stdout":"hi\n","stderr":""}}</code></pre>
+            </div>
+          </div>
+          <p class="note">
+            <code>library.run</code> has <b>no danger gate</b> — a consumer should read
+            <code>danger</code> / <code>auto_danger</code> from <code>library.list</code> and
+            confirm before invoking it. The full wire contract — message shapes, error codes, and
+            every field — ships with the plugin as <code>docs/daemon-protocol.md</code>.
           </p>
         </section>
 
         <footer>
-          Public artifacts, installer scripts, and plugin releases are available from
-          <a href="https://github.com/swavan/plugins">github.com/swavan/plugins</a>.
-          Looking for the terminal &amp; file workspace? See the
-          <a href="./termo.html">Termo plugin page</a>.
+          Termo is published from the public Swavan plugin registry at
+          <a href="https://github.com/swavan/plugins">github.com/swavan/plugins</a> —
+          see the <a href="./index.html">CLI &amp; plugin index</a> to get started.
         </footer>
       </div>
     </main>
