@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chitra — Swavan database client TUI</title>
+    <meta
+      name="description"
+      content="Chitra is a fast, native multi-driver database client for the terminal: browse schemas, run queries in DBeaver-style tabs, visualize ER diagrams, and keep credentials in a Touch ID-guarded vault — installed standalone or as a Swavan plugin."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #061112;
+        --ink: #eefdfc;
+        --muted: #8daaaa;
+        --soft: #0c2022;
+        --panel: #102b2e;
+        --panel-2: #08191b;
+        --teal: #22d3c5;
+        --teal-2: #72fff4;
+        --teal-3: rgba(34, 211, 197, 0.16);
+        --line: rgba(114, 255, 244, 0.2);
+        --line-2: rgba(114, 255, 244, 0.44);
+        --white-4: rgba(255, 255, 255, 0.04);
+        --white-7: rgba(255, 255, 255, 0.07);
+        --shadow: rgba(0, 0, 0, 0.42);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 8% 10%, rgba(34, 211, 197, 0.2), transparent 28rem),
+          radial-gradient(circle at 92% 0%, rgba(114, 255, 244, 0.12), transparent 26rem),
+          linear-gradient(120deg, transparent 0 74%, rgba(34, 211, 197, 0.08) 74% 75%, transparent 75%),
+          linear-gradient(180deg, #061112 0%, #081719 50%, #04090a 100%);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        line-height: 1.55;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      code,
+      pre {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      }
+
+      .shell {
+        width: min(1240px, calc(100% - 28px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid var(--line);
+        background: rgba(6, 17, 18, 0.84);
+        backdrop-filter: blur(18px);
+      }
+
+      .topbar-inner {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        min-height: 72px;
+        gap: 18px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+      }
+
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--line-2);
+        border-radius: 12px;
+        background:
+          linear-gradient(135deg, rgba(114, 255, 244, 0.94), rgba(34, 211, 197, 0.42)),
+          #102b2e;
+        color: #031112;
+        box-shadow: 0 0 34px rgba(34, 211, 197, 0.26);
+      }
+
+      .status-strip {
+        display: flex;
+        justify-content: center;
+        min-width: 0;
+      }
+
+      .status-strip span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        max-width: 100%;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--white-4);
+        color: var(--muted);
+        font-size: 0.86rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 0 11px;
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .nav a:hover {
+        background: var(--teal-3);
+        color: var(--teal-2);
+      }
+
+      .deck {
+        display: grid;
+        grid-template-columns: 248px minmax(0, 1fr);
+        gap: 18px;
+        padding: 24px 0 56px;
+      }
+
+      .rail {
+        position: sticky;
+        top: 92px;
+        align-self: start;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(8, 25, 27, 0.8);
+        box-shadow: 0 22px 70px var(--shadow);
+        overflow: hidden;
+      }
+
+      .rail-head {
+        padding: 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .rail-kicker,
+      .kicker {
+        color: var(--teal-2);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .rail-title {
+        margin-top: 8px;
+        font-size: 1.08rem;
+        font-weight: 780;
+      }
+
+      .rail-links {
+        display: grid;
+        padding: 8px;
+      }
+
+      .rail-links a {
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        align-items: center;
+        gap: 10px;
+        min-height: 44px;
+        padding: 0 10px;
+        border-radius: 12px;
+        color: var(--muted);
+      }
+
+      .rail-links a:hover {
+        background: var(--teal-3);
+        color: var(--ink);
+      }
+
+      .rail-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 20px rgba(34, 211, 197, 0.68);
+      }
+
+      .panel-stack {
+        display: grid;
+        gap: 18px;
+        min-width: 0;
+      }
+
+      .hero-console {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
+        gap: 18px;
+        min-width: 0;
+      }
+
+      .intro {
+        position: relative;
+        min-height: 520px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background:
+          linear-gradient(135deg, rgba(114, 255, 244, 0.12), transparent 34%),
+          linear-gradient(180deg, rgba(16, 43, 46, 0.86), rgba(8, 25, 27, 0.88));
+        box-shadow: 0 30px 90px var(--shadow);
+        overflow: hidden;
+      }
+
+      .intro::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, transparent 0 49%, rgba(114, 255, 244, 0.12) 49% 50%, transparent 50%),
+          linear-gradient(0deg, transparent 0 49%, rgba(114, 255, 244, 0.08) 49% 50%, transparent 50%);
+        background-size: 86px 86px;
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 72%);
+        pointer-events: none;
+      }
+
+      .intro-body {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        align-content: space-between;
+        min-height: 520px;
+        padding: clamp(24px, 5vw, 44px);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 780px;
+        margin-top: 14px;
+        font-size: clamp(2.7rem, 7vw, 6.6rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      .lead {
+        max-width: 680px;
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.8vw, 1.18rem);
+      }
+
+      .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 16px;
+        border: 1px solid var(--line-2);
+        border-radius: 12px;
+        background: var(--white-4);
+        color: var(--ink);
+        font-weight: 740;
+      }
+
+      .button.primary {
+        border-color: transparent;
+        background: var(--teal);
+        color: #031112;
+        box-shadow: 0 18px 44px rgba(34, 211, 197, 0.2);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 36px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.16);
+        padding: 14px;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 1.28rem;
+        line-height: 1;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .operator-card {
+        display: grid;
+        align-content: space-between;
+        min-height: 520px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: #071719;
+        box-shadow: 0 30px 90px var(--shadow);
+        overflow: hidden;
+      }
+
+      .operator-top {
+        display: grid;
+        gap: 14px;
+        padding: 18px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(34, 211, 197, 0.12), transparent);
+      }
+
+      .selected-plugin {
+        border: 1px solid var(--line-2);
+        border-radius: 18px;
+        background: var(--teal-3);
+        padding: 18px;
+      }
+
+      .selected-plugin small {
+        color: var(--muted);
+        font-weight: 760;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .selected-plugin strong {
+        display: block;
+        margin-top: 8px;
+        color: var(--teal-2);
+        font-size: clamp(1.3rem, 3vw, 1.9rem);
+        line-height: 1.1;
+        overflow-wrap: anywhere;
+      }
+
+      .operator-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .operator-list span {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 10px 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .operator-list b {
+        color: var(--ink);
+      }
+
+      .terminal {
+        min-width: 0;
+        background: #020b0c;
+      }
+
+      .terminal-bar {
+        display: flex;
+        gap: 8px;
+        padding: 14px 16px;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--teal);
+      }
+
+      .dot:nth-child(1) {
+        background: #ff6b6b;
+      }
+
+      .dot:nth-child(2) {
+        background: #ffd166;
+      }
+
+      pre {
+        margin: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 18px;
+        color: #d8fffb;
+        font-size: 0.9rem;
+        line-height: 1.65;
+        white-space: pre;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      code {
+        color: #d8fffb;
+        overflow-wrap: anywhere;
+      }
+
+      .prompt {
+        color: var(--teal-2);
+      }
+
+      .cmt {
+        color: var(--muted);
+      }
+
+      section.module {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(8, 25, 27, 0.72);
+        box-shadow: 0 24px 80px var(--shadow);
+        overflow: hidden;
+      }
+
+      .module-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+        gap: 18px;
+        align-items: end;
+        padding: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h2 {
+        margin-top: 8px;
+        font-size: clamp(1.8rem, 3.4vw, 3.1rem);
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+
+      .module-head p {
+        color: var(--muted);
+      }
+
+      .install-grid,
+      .feature-grid,
+      .command-grid,
+      .complete-grid {
+        display: grid;
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .install-grid,
+      .command-grid,
+      .complete-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .tile {
+        min-width: 0;
+        background:
+          linear-gradient(135deg, rgba(34, 211, 197, 0.08), transparent 34%),
+          var(--panel-2);
+        padding: 22px;
+      }
+
+      .tile h3 {
+        font-size: 1.08rem;
+      }
+
+      .tile p {
+        margin-top: 10px;
+        color: var(--muted);
+      }
+
+      .feature-tile {
+        min-height: 210px;
+        display: grid;
+        align-content: start;
+        gap: 6px;
+      }
+
+      .feature-tag {
+        color: var(--teal-2);
+        font-size: 0.78rem;
+        font-weight: 820;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .command-title {
+        color: var(--teal-2);
+        font-size: 0.82rem;
+        font-weight: 820;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .keys {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .key-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 14px 22px;
+        background: var(--panel-2);
+        color: var(--muted);
+      }
+
+      .key-row kbd {
+        flex: none;
+        border: 1px solid var(--line-2);
+        border-radius: 8px;
+        background: var(--white-7);
+        padding: 4px 9px;
+        color: var(--ink);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
+      .note {
+        margin: 0;
+        padding: 18px 24px;
+        border-top: 1px solid var(--line);
+        background: rgba(34, 211, 197, 0.07);
+        color: #d8fffb;
+      }
+
+      footer {
+        padding: 10px 0 44px;
+        color: var(--muted);
+      }
+
+      footer a {
+        color: var(--teal-2);
+      }
+
+      @media (max-width: 1040px) {
+        .deck,
+        .hero-console {
+          grid-template-columns: 1fr;
+        }
+
+        .rail {
+          position: static;
+        }
+
+        .rail-links {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .operator-card,
+        .intro,
+        .intro-body {
+          min-height: auto;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .topbar-inner,
+        .module-head,
+        .install-grid,
+        .command-grid,
+        .complete-grid,
+        .feature-grid,
+        .keys {
+          grid-template-columns: 1fr;
+        }
+
+        .status-strip {
+          justify-content: flex-start;
+        }
+
+        .nav {
+          justify-content: flex-start;
+          flex-wrap: wrap;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .shell {
+          width: min(100% - 22px, 1240px);
+        }
+
+        .topbar-inner {
+          gap: 10px;
+          padding: 12px 0;
+        }
+
+        .status-strip {
+          display: none;
+        }
+
+        .nav {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .nav a,
+        .button {
+          justify-content: center;
+          width: 100%;
+        }
+
+        .deck {
+          padding-top: 14px;
+        }
+
+        .rail-links {
+          grid-template-columns: 1fr;
+        }
+
+        .intro-body,
+        .module-head,
+        .tile {
+          padding: 18px;
+        }
+
+        h1 {
+          font-size: clamp(2.35rem, 14vw, 3.5rem);
+        }
+
+        .metrics,
+        .quick-actions {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        pre {
+          padding: 16px;
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="#top" aria-label="Chitra home">
+          <span class="brand-mark">C</span>
+          <span>Chitra</span>
+        </a>
+        <div class="status-strip">
+          <span>native database client TUI / multi-driver / macOS · Linux · Windows</span>
+        </div>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="#install">Install</a>
+          <a href="#workspace">Workspace</a>
+          <a href="#shortcuts">Shortcuts</a>
+          <a href="#vault">Vault</a>
+          <a href="#cli">CLI</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top" class="shell deck">
+      <aside class="rail" aria-label="Page sections">
+        <div class="rail-head">
+          <div class="rail-kicker">Chitra</div>
+          <div class="rail-title">A fast native multi-driver database client for the terminal.</div>
+        </div>
+        <div class="rail-links">
+          <a href="#install"><span class="rail-dot"></span><span>Install &amp; launch</span></a>
+          <a href="#workspace"><span class="rail-dot"></span><span>The workspace</span></a>
+          <a href="#shortcuts"><span class="rail-dot"></span><span>Keyboard</span></a>
+          <a href="#vault"><span class="rail-dot"></span><span>Vault &amp; connect</span></a>
+          <a href="#cli"><span class="rail-dot"></span><span>Command line</span></a>
+        </div>
+      </aside>
+
+      <div class="panel-stack">
+        <section class="hero-console" aria-label="Chitra overview">
+          <div class="intro">
+            <div class="intro-body">
+              <div>
+                <div class="kicker">Swavan plugin · chitra</div>
+                <h1>The database client that lives in your terminal.</h1>
+                <p class="lead">
+                  Chitra is a native, multi-driver database client for the terminal: browse schemas,
+                  run queries in DBeaver-style tabs that share one connection, visualize your schema
+                  as an ER diagram, and keep every credential in a Touch ID-guarded vault — installed
+                  standalone or through the Swavan CLI.
+                </p>
+                <div class="quick-actions">
+                  <a class="button primary" href="#install">Install chitra</a>
+                  <a class="button" href="#workspace">Explore features</a>
+                </div>
+              </div>
+
+              <div class="metrics" aria-label="Chitra summary">
+                <div class="metric">
+                  <strong>3</strong>
+                  <span>platforms — macOS, Linux, Windows</span>
+                </div>
+                <div class="metric">
+                  <strong>Multi</strong>
+                  <span>relational, document &amp; graph drivers</span>
+                </div>
+                <div class="metric">
+                  <strong>1</strong>
+                  <span>self-updating standalone binary</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="operator-card" aria-label="Chitra install console">
+            <div class="operator-top">
+              <div class="selected-plugin">
+                <small>install target</small>
+                <strong>chitra</strong>
+              </div>
+              <div class="operator-list">
+                <span><b>browse</b> schema folders &amp; entities</span>
+                <span><b>query</b> tabbed editors, one connection</span>
+                <span><b>diagram</b> visual ER of your schema</span>
+              </div>
+            </div>
+            <div class="terminal">
+              <div class="terminal-bar" aria-hidden="true">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+              <pre><code><span class="prompt">$</span> curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install-chitra.sh | sh
+Installing Chitra...
+Ready.
+
+<span class="prompt">$</span> chitra                    <span class="cmt"># launch the TUI</span></code></pre>
+            </div>
+          </aside>
+        </section>
+
+        <section id="install" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">01 / bootstrap</div>
+              <h2>Install &amp; launch</h2>
+            </div>
+            <p>
+              Chitra installs two ways: a one-line <b>standalone</b> installer (no swavan CLI
+              needed), or through the <code>swavan</code> CLI alongside your other plugins. Either
+              way it self-updates.
+            </p>
+          </div>
+          <div class="install-grid">
+            <div class="tile">
+              <div class="command-title">Standalone — macOS &amp; Linux</div>
+              <pre><code>curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install-chitra.sh | sh</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Standalone — Windows PowerShell</div>
+              <pre><code>irm https://raw.githubusercontent.com/swavan/plugins/main/install-chitra.ps1 | iex</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Via the swavan CLI</div>
+              <pre><code>swavan plugin install chitra
+swavan launch chitra</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Update / remove</div>
+              <pre><code>chitra --self-update      <span class="cmt"># standalone update</span>
+swavan plugin update chitra
+swavan plugin uninstall chitra</code></pre>
+            </div>
+          </div>
+          <p class="note">
+            The standalone installer resolves the latest version from the public catalog,
+            SHA-256-verifies the signed download, and only replaces the binary when a newer build
+            exists — so re-running it (or <code>chitra --self-update</code>) is a safe no-op when
+            you're already current, and never downgrades a newer local build.
+          </p>
+        </section>
+
+        <section id="workspace" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">02 / the workspace</div>
+              <h2>Browse, query, visualize</h2>
+            </div>
+            <p>
+              A single terminal window: a collapsible schema navigator, tabbed query editors that
+              share one connection, result grids, and an in-terminal ER diagram.
+            </p>
+          </div>
+          <div class="feature-grid">
+            <article class="tile feature-tile">
+              <div class="feature-tag">Drivers</div>
+              <h3>Multi-driver</h3>
+              <p>
+                One client for relational, document, and graph databases — from Postgres to
+                Snowflake — each behind a common browse-and-query surface, so muscle memory carries
+                across engines.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Query tabs</div>
+              <h3>DBeaver-style editors</h3>
+              <p>
+                Open multiple query tabs that all share a single connection. Write, run, and keep
+                several working queries side by side without juggling sessions.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Schema</div>
+              <h3>Collapsible navigator</h3>
+              <p>
+                The left panel groups objects into collapsible schema folders under an
+                <b>Entities</b> header, so large databases stay navigable. Drill in to load table
+                detail on demand.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">ER diagram</div>
+              <h3>Visual, in-terminal</h3>
+              <p>
+                Render a focused table's relationships or the whole schema as a box-and-connector
+                diagram drawn right in the terminal, with foreign-key edges — plus a Mermaid export
+                for copy/save.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Results</div>
+              <h3>Full-type result grids</h3>
+              <p>
+                Query results render in a scrollable grid that preserves each column's real type,
+                so numbers, timestamps, JSON, and text all display faithfully.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Keybindings</div>
+              <h3>Fully remappable</h3>
+              <p>
+                An in-TUI Settings ▸ Keybindings screen lets you search, remap, and live-rebind
+                every key, then save — so the whole surface bends to your habits.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="shortcuts" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">03 / keyboard</div>
+              <h2>Shortcuts</h2>
+            </div>
+            <p>
+              These are the defaults — every binding is remappable from
+              <b>Settings ▸ Keybindings</b> (<kbd>F1</kbd>), with search and live rebinding.
+            </p>
+          </div>
+          <div class="keys">
+            <div class="key-row"><span>Keybindings settings</span><kbd>F1</kbd></div>
+            <div class="key-row"><span>New query tab</span><kbd>Ctrl&nbsp;G</kbd></div>
+            <div class="key-row"><span>ER diagram — focused table</span><kbd>F3</kbd></div>
+            <div class="key-row"><span>ER diagram — whole schema</span><kbd>F10</kbd></div>
+          </div>
+          <p class="note">
+            Chitra is keyboard-first: the command surface, schema navigator, query tabs, and result
+            grid are all reachable without the mouse. If a default clashes with your terminal or
+            multiplexer, remap it in <kbd>F1</kbd> and save.
+          </p>
+        </section>
+
+        <section id="vault" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">04 / credentials</div>
+              <h2>Vault &amp; connections</h2>
+            </div>
+            <p>
+              Connection credentials live in a local encrypted vault, unlocked with Touch ID where
+              available — and Chitra can reconnect the moment it starts.
+            </p>
+          </div>
+          <div class="install-grid">
+            <article class="tile feature-tile">
+              <div class="feature-tag">Vault</div>
+              <h3>Touch ID unlock</h3>
+              <p>
+                Saved connections are held in an encrypted vault that unlocks with a single
+                biometric prompt on supported machines — credentials never sit in plaintext config,
+                and startup never silently reads the keychain.
+              </p>
+            </article>
+            <article class="tile feature-tile">
+              <div class="feature-tag">Auto-connect</div>
+              <h3>Straight to your data</h3>
+              <p>
+                Turn on auto-connect (Settings ▸ General) and Chitra reopens your chosen connection
+                on launch, so you land in the schema browser instead of a connection picker.
+              </p>
+            </article>
+          </div>
+          <p class="note">
+            Every connection carries its own user-configurable timeout, and credentials are scoped
+            to the vault — so sharing a machine or scripting a launch never leaks secrets into your
+            shell history or dotfiles.
+          </p>
+        </section>
+
+        <section id="cli" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">05 / command line</div>
+              <h2>Launch &amp; maintain</h2>
+            </div>
+            <p>
+              Chitra is a TUI first, but a few flags handle version, updates, and help straight from
+              the shell.
+            </p>
+          </div>
+          <div class="command-grid">
+            <div class="tile">
+              <div class="command-title">Launch</div>
+              <pre><code>chitra                 <span class="cmt"># start the TUI</span>
+swavan launch chitra   <span class="cmt"># via the CLI</span></code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Version</div>
+              <pre><code>chitra --version</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Update</div>
+              <pre><code>chitra --self-update   <span class="cmt"># standalone</span>
+swavan plugin update chitra</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Help</div>
+              <pre><code>chitra --help</code></pre>
+            </div>
+          </div>
+          <p class="note">
+            Installed standalone, <code>chitra</code> keeps itself current with
+            <code>--self-update</code>; installed as a plugin, it updates with the rest of your set
+            via <code>swavan plugin update</code>.
+          </p>
+        </section>
+
+        <footer>
+          Chitra is published from the public Swavan plugin registry at
+          <a href="https://github.com/swavan/plugins">github.com/swavan/plugins</a> —
+          see the <a href="./index.html">CLI &amp; plugin index</a>, or the
+          <a href="./termo.html">Termo terminal &amp; file workspace</a>.
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>
