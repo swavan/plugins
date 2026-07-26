@@ -8,5 +8,13 @@
     "name": "chitra",
     "version": "0.2.4",
     "description": "Chitra database client \u2014 a multi-driver TUI for relational, document, graph, and other databases."
+  },
+  {
+    "name": "conto",
+    "description": "Docker and Kubernetes manager for Swavan"
+  },
+  {
+    "name": "swavan-terminal-auto-complete",
+    "description": "AI-powered terminal autocomplete"
   }
 ]
