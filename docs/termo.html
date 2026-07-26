@@ -795,32 +795,40 @@ Ready.
               <h2>Install &amp; launch</h2>
             </div>
             <p>
-              Termo installs through the <code>swavan</code> CLI. Because it's a native
-              standalone app, install also wires up an app-directory entry and an on-PATH
-              <code>termo</code> command.
+              Termo installs with a single command — no swavan CLI required. The installer
+              auto-detects your OS and architecture, verifies the signed download, and wires up
+              both the GUI app and an on-PATH <code>termo</code> command. Re-run it any time to
+              update.
             </p>
           </div>
           <div class="install-grid">
             <div class="tile">
-              <div class="command-title">Install</div>
-              <pre><code><span class="cmt"># needs the swavan CLI — see swavan/plugins</span>
-swavan plugin install termo</code></pre>
+              <div class="command-title">macOS &amp; Linux</div>
+              <pre><code>curl -fsSL https://raw.githubusercontent.com/swavan/plugins/main/install-termo.sh | sh</code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Launch the GUI</div>
-              <pre><code>swavan launch termo
-<span class="cmt"># or, from any terminal, the installed command:</span>
-termo            <span class="cmt"># open the current directory</span></code></pre>
+              <div class="command-title">Windows PowerShell</div>
+              <pre><code>irm https://raw.githubusercontent.com/swavan/plugins/main/install-termo.ps1 | iex</code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Open a path</div>
-              <pre><code>termo ~/code/project   <span class="cmt"># root at a folder</span>
-termo ./notes.md       <span class="cmt"># open a file in the editor</span></code></pre>
+              <div class="command-title">Via the swavan CLI</div>
+              <pre><code>swavan plugin install termo
+swavan launch termo</code></pre>
             </div>
             <div class="tile">
-              <div class="command-title">Update / remove</div>
-              <pre><code>swavan plugin update termo
-swavan plugin uninstall termo</code></pre>
+              <div class="command-title">Launch &amp; open</div>
+              <pre><code>termo                  <span class="cmt"># current directory</span>
+termo ~/code/project   <span class="cmt"># root at a folder</span>
+termo ./notes.md       <span class="cmt"># file in the editor</span></code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Update</div>
+              <pre><code><span class="cmt"># re-run the installer, or via the CLI:</span>
+swavan plugin update termo</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Remove</div>
+              <pre><code>swavan plugin uninstall termo</code></pre>
             </div>
           </div>
           <p class="note">
