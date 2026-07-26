@@ -8,7 +8,7 @@
   {
     "name": "formatter",
     "kind": "formatter",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Bundled code formatter \u2014 JSON, TOML, YAML, HTML (pure-Rust)"
   }
 ]
