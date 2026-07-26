@@ -1,0 +1,14 @@
+[
+  {
+    "name": "syntect",
+    "kind": "highlighter",
+    "version": "0.1.1",
+    "description": "syntect-based syntax highlighting (broad language coverage, pure-Rust)"
+  },
+  {
+    "name": "formatter",
+    "kind": "formatter",
+    "version": "0.1.0",
+    "description": "Bundled code formatter \u2014 JSON, TOML, YAML, HTML (pure-Rust)"
+  }
+]
