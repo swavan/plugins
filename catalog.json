@@ -3,5 +3,10 @@
     "name": "termo",
     "version": "0.1.31",
     "description": "Termo \u2014 a fast native terminal & file workspace, installed as a standalone app. Shares its scripts & snippets over a JSON-RPC daemon."
+  },
+  {
+    "name": "chitra",
+    "version": "0.2.4",
+    "description": "Chitra database client \u2014 a multi-driver TUI for relational, document, graph, and other databases."
   }
 ]
