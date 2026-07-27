@@ -680,6 +680,8 @@
           <a href="#install">Install</a>
           <a href="#plugins">Plugins</a>
           <a href="#manage">Manage</a>
+          <a href="#addons">Addons</a>
+          <a href="#daemons">Daemons</a>
           <a href="./chitra.html">Chitra</a>
           <a href="./termo.html">Termo</a>
         </nav>
@@ -696,6 +698,8 @@
           <a href="#install"><span class="rail-dot"></span><span>Install CLI</span></a>
           <a href="#plugins"><span class="rail-dot"></span><span>Plugin set</span></a>
           <a href="#manage"><span class="rail-dot"></span><span>Lifecycle</span></a>
+          <a href="#addons"><span class="rail-dot"></span><span>Addons</span></a>
+          <a href="#daemons"><span class="rail-dot"></span><span>Daemons</span></a>
           <a href="#complete"><span class="rail-dot"></span><span>Shell setup</span></a>
         </div>
       </aside>
@@ -853,10 +857,83 @@ swavan plugin update chitra</code></pre>
           </div>
         </section>
 
+        <section id="addons" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">04 / runtime addons</div>
+              <h2>Syntax highlighters &amp; formatters</h2>
+            </div>
+            <p>
+              Addons are lighter runtime extensions (syntax highlighters,
+              formatters) that Swavan apps load directly — managed with
+              <code>swavan addon</code>, separately from plugins.
+            </p>
+          </div>
+          <div class="command-grid">
+            <div class="tile">
+              <div class="command-title">List</div>
+              <pre><code>swavan addon list</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Add</div>
+              <pre><code>swavan addon add syntect
+swavan addon add formatter</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Update or remove</div>
+              <pre><code>swavan addon update syntect
+swavan addon remove syntect</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Enable or disable</div>
+              <pre><code>swavan addon disable syntect
+swavan addon enable syntect</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="daemons" class="module">
+          <div class="module-head">
+            <div>
+              <div class="kicker">05 / daemons</div>
+              <h2>Inspect &amp; control plugin daemons</h2>
+            </div>
+            <p>
+              Plugins that share data with the host run a background daemon.
+              <code>swavan ps</code> lists the fleet and its state;
+              <code>swavan daemon</code> starts, stops, and cleans them up.
+            </p>
+          </div>
+          <div class="command-grid">
+            <div class="tile">
+              <div class="command-title">List</div>
+              <pre><code>swavan ps
+swavan ps --running</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Start / stop / restart</div>
+              <pre><code>swavan daemon start &lt;name&gt;
+swavan daemon stop &lt;name&gt;
+swavan daemon restart &lt;name&gt;</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Kill / pause / resume</div>
+              <pre><code>swavan daemon kill &lt;name&gt;
+swavan daemon pause &lt;name&gt;    # Unix only
+swavan daemon resume &lt;name&gt;   # Unix only</code></pre>
+            </div>
+            <div class="tile">
+              <div class="command-title">Bulk &amp; cleanup</div>
+              <pre><code>swavan daemon stop --all
+swavan daemon prune            # remove stale socket/PID files</code></pre>
+            </div>
+          </div>
+        </section>
+
         <section id="complete" class="module">
           <div class="module-head">
             <div>
-              <div class="kicker">04 / shell setup</div>
+              <div class="kicker">06 / shell setup</div>
               <h2>Completion scripts</h2>
             </div>
             <p>
