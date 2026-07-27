@@ -1,7 +1,7 @@
 [
   {
     "name": "termo",
-    "version": "0.1.32",
+    "version": "0.1.33",
     "description": "Termo \u2014 a fast native terminal & file workspace, installed as a standalone app. Shares its scripts & snippets over a JSON-RPC daemon."
   },
   {
