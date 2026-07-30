@@ -10,5 +10,11 @@
     "kind": "formatter",
     "version": "0.1.1",
     "description": "Bundled code formatter \u2014 JSON, TOML, YAML, HTML (pure-Rust)"
+  },
+  {
+    "name": "mermaid",
+    "kind": "renderer",
+    "version": "0.1.0",
+    "description": "Bundled Mermaid diagram renderer \u2014 flowcharts, sequence diagrams, class diagrams (pure-Rust merman)"
   }
 ]
