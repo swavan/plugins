@@ -14,7 +14,7 @@
   {
     "name": "mermaid",
     "kind": "renderer",
-    "version": "0.1.0",
-    "description": "Bundled Mermaid diagram renderer \u2014 flowcharts, sequence diagrams, class diagrams (pure-Rust merman)"
+    "version": "0.2.0",
+    "description": "Bundled Mermaid diagram renderer \u2014 flowcharts, sequence, class, state, ER, Gantt, pie"
   }
 ]
